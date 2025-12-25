@@ -18,7 +18,7 @@ readStream.on("data", (chunk) => {
 const copyPath = path.resolve("./copy.text")
 const writeStream = fs.createWriteStream(copyPath, { encoding: "utf-8" })
 
-readStream.on("data" , (chunk)=>{
+readStream.on("data", (chunk) => {
     writeStream.write(chunk)
 })
 
@@ -28,13 +28,15 @@ readStream.pipe(Zip.createGzip()).pipe(writeStream)
 
 
 
+// ############### Part 2 ###################
+
 const userspath = path.resolve("./users.json")
 const readable = fs.readFileSync(userspath, { encoding: "utf-8" })
 let port = 3000;
 const users = JSON.parse(readable)
 
 
-// ############### Part 2 ###################
+
 const server = http.createServer((req, res) => {
     const { url, method } = req;
 
@@ -177,3 +179,23 @@ server.listen(port, () => {
     console.log(`Server is running on port :: ${port}`);
 })
 
+
+// #################### Part 3 ###################
+
+/*
+1) The Node.js Event Loop is a mechanism that allows Node js to handle multiple asynchronous operations efficiently using a single thread It continuously checks the call stack and the task queues, executing callbacks when the stack is empty, which enables non-blocking I/O operations.
+
+2) Libuv is a C library that provides Node.js with asynchronous I/O capabilities. It manages the event loop, handles non-blocking operations and uses a thread pool to execute tasks like file system operations and networking efficiently
+
+3) Node.js delegates asynchronous tasks to Libuv or the system, and once they are completed their callbacks are placed in the event loop to be executed without blocking the main thread
+
+4) The Call Stack executes synchronous code
+
+   The Event Queue holds completed asynchronous callbacks
+
+   The Event Loop moves callbacks from the queue to the stack when it becomes empty
+
+5) The Node.js thread pool is used to handle heavy or blocking tasks like file system and crypto operations. Its size can be configured using the UV_THREADPOOL_SIZE environment variable
+
+6) Blocking code stops the execution of other tasks, while non-blocking code allows Node.js to continue running other operations using asynchronous processing and the event loop
+ */
